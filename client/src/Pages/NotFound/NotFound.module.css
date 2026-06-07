@@ -1,0 +1,11 @@
+.notFoundBox{
+    width: 100vw;
+    height: 100vh;
+    padding: 40px 30px;
+    padding-bottom: 70px;
+    overflow-y: auto;
+    background-color:#ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}

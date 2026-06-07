@@ -1,0 +1,421 @@
+/* QRScanner.module.css */
+
+.container {
+    width: 100vw;
+    height: 100vh;
+  text-align: center;
+  padding: 20px;
+  overflow: hidden;
+  padding-bottom: 70px;
+  display: flex;
+  gap: 10px;
+  background-color:rgb(255, 255, 255);
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  color: black;
+  z-index: 2000;
+  scrollbar-width: none;
+  /* position: relative; */
+}
+
+.title{
+  font-size: 24px;
+  font-weight: 500;
+  
+}
+.desc{
+    font-size: 14px;
+    display: flex;
+    
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+}
+
+.resultContainer {
+  margin-top: 20px;
+}
+
+.resultText {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.scanAgainBtn {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #32CD32;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.scanAgainBtn:hover {
+  background-color: #28a828;
+}
+
+.scannerWrapper {
+  position: relative;
+  height: 250px;
+  width: 300px;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: rgb(0, 0, 0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.video{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+
+
+.scanHint {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff0a;
+  font-size: 16px;
+  font-weight: bold;
+  z-index: 15;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.barcodeScanner {
+  animation: pulse 1.5s infinite ease-in-out; /* Pulsing effect */
+}
+
+.alert{
+  position: absolute;
+  bottom: 70px;
+  background-color: #dbd9d9;
+  font-size: 8px;
+  word-spacing: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 40px;
+  color: rgb(255, 0, 0);
+  padding: 5px 9px;
+  font-style: normal;
+  text-transform: uppercase;
+  font-family: sans-serif;
+  
+}
+.noFoundBox{
+  width: 100%;
+  height: 2cm;
+  background-color: rgb(234, 234, 234);
+  display: flex;
+  justify-content:center;
+  align-items: center;
+  border-radius: 10px;
+  padding: 5px 5px;
+  color: rgb(0, 0, 0);
+  gap: 5px;
+  text-align: left;
+}
+.noProduct{
+
+  position: absolute;
+  bottom:0px;
+  left: 0px;
+  background-color: #ffffff;
+  border: 2px solid green;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  display: flex;
+  padding: 20px 10px;
+  padding-bottom: 75px;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100vw;
+  height: 60vh;
+  scrollbar-width:none;
+  border-bottom: none;
+  overflow: hidden;
+  animation: popup 0.5s ease-in-out;
+}
+.yesProduct{
+  position: absolute;
+  bottom:0px;
+  left: 0px;
+  background-color: #ffffff;
+  border: 2px solid green;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  display: flex;
+  padding: 20px 10px;
+  padding-bottom: 75px;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100vw;
+  height: 60vh;
+  scrollbar-width:none;
+  border-bottom: none;
+  overflow: hidden;
+  animation: popup 0.5s ease-in-out;
+}
+
+@keyframes popup {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.productData{
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content:center;
+  font-size: 12px;
+  background-color: rgb(255, 255, 255);
+  height: 100%;
+  border-radius: 10px;
+}
+.proceed{
+  width: 1.5cm;
+  height: 100%;
+  border: none;
+  background-color: #32CD32;
+  border-radius: 10px;
+}
+.detail{
+  padding-left: 10px;
+}
+.retry{
+  height: 1cm;
+  border: none;
+  border-radius: 10px;
+  background-color: #28a828;
+  color: white;
+}
+.check{
+  width: 100%;
+  background-color: #e2e2e2;
+  border-radius: 10px;
+  padding: 5px 10px;
+  font-size: 10px;
+  margin-top: 10px;
+  
+}
+.notFound{
+  color: red;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+.inputData{
+  position: relative;
+  width: 100%;
+  background-color: #d1d1d1;
+  height: 1.2cm;
+  margin-top: 10px;
+  border-radius: 50px;
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 2px;
+  gap: 2px;
+}
+.inputData>input{
+  width: 100%;
+  height: 100%;
+  border-radius: 50px;
+  border: none;
+  outline: none;
+  color: grey;
+  padding: 0px 20px;
+  padding-right: 1cm;
+  font-size: 10px;
+}
+.continue{
+  height: 0.9cm;
+  width: 1.2cm;
+  border-radius: 50px;
+  border: none;
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translate(0%, -50%);
+  background-color:#32CD32;
+}
+button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.buttonDiv{
+  width: 100%;
+  background-color: rgb(245, 245, 245);
+  border-radius: 60px;
+  padding: 2px 2px ;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.backButton{
+    /* position: absolute; */
+    border: none;
+    height: 1cm;
+    width: 1cm;
+    padding: 0px 10px;
+    border-radius: 60px;
+    font-size: 12px;
+    font-style: italic;
+    background-color:rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+.backButton>p{
+  padding: 2px 2px;
+}
+.buttonDivWrap{
+  position: absolute;
+  width: 100%;
+  padding: 10px;
+  top: 0;
+}
+.yesProductWrap{
+  display: flex;
+  padding: 5px;
+  width: 100%;
+  height: 2.5cm;
+  background-color: rgb(231, 231, 231);
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  border-radius: 10px;
+  color: rgb(0, 0, 0);
+}
+.yesProductWrapNot{
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  width: 100%;
+  height: 2.5cm;
+  background-color: rgb(255, 255, 255);
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  border-radius: 10px;
+  color: rgb(0, 0, 0);
+  gap: 20px;
+  border: 2px solid rgb(241, 241, 241);
+}
+.wrap{
+  background-color: white;
+  flex: 1;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items:flex-start;
+  padding-left: 10px;
+  padding-right: 10px;
+  justify-content: center;
+  height: 100%;
+  font-size: small;
+  scrollbar-width: none;
+  overflow: hidden;
+
+}
+.inputDivMan{
+  background-color: #ffffff;
+  position: relative;
+
+}
+.inputDivMan>input{
+  border-radius: 10px;
+  background-color: #f4f4f4;
+  font-size: x-small;
+}
+.continue{
+  position: absolute;
+  right: 4px !important;
+  border-radius: 10px !important;
+}
+.cover{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.getResult{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20px;
+  background-color: #efefef;
+  border-radius: 5px;
+
+}
+.getResult>p{
+  padding: 0px 10px;
+  font-size: 12px;
+  font-family:sans-serif;
+  color: rgb(160, 155, 155);
+}
+.productHandle{
+  display: flex;
+
+}
+.productHandle p:nth-child(2){
+  word-wrap: break-word;
+  text-align: left;
+}
+.wrap strong{
+  padding-right: 5px;
+}
+
+.errDiv{
+    width: 100%;
+    height: 15px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size:13px;
+    font-family:sans-serif;
+    /* padding-left: 10px; */
+}
+.errMessage{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+    color: red;
+    font-weight: 500;
+    font-size:10px;
+    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    /* font-style: italic; */
+    border: 1px solid rgb(255, 57, 57);
+    background-color: rgb(255, 232, 232);
+    padding: 2px 5px;
+    border-radius: 4px;
+}

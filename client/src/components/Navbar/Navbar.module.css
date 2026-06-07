@@ -1,0 +1,39 @@
+
+.mainDiv{
+    box-sizing: border-box;
+    position:fixed;
+    bottom: 0;
+    min-width: 100vw;
+    height: 65px;
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    border: 1px solid white;
+    border-top:2px solid rgb(237, 237, 237) ;
+}
+.navItem{
+    width:1.2cm;
+    height:1.2cm;
+    border-radius: 20px;
+    background-color:rgb(255, 255, 255);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid rgb(227, 227, 227);
+}
+.navItem:nth-child(3){
+    background-color: green;
+    width: 1.4cm;
+    height: 1.4cm;
+    color: white;
+    margin-bottom: 30px;
+}
+.reactIcons{
+    font-size: 23px;
+    color:green;
+}

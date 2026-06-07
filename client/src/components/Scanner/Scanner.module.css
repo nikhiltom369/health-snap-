@@ -1,0 +1,120 @@
+/* BoxComponent.module.css */
+.box {
+    width:100%;
+    position:absolute;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .center {
+    text-align: center;
+  }
+  
+  /* Barcode container */
+  .animBox {
+    position: relative;
+    width: 150px;
+    height: 100px;
+    padding: 25px 20px;
+    transition: transform 0.6s ease-out;
+  }
+  
+  /* Adds the 4 corners */
+  .animBox:before,
+  .animBox:after,
+  .animBox > :first-child:before,
+  .animBox > :first-child:after {
+    position: absolute;
+    width: 10%;
+    height: 15%;
+    border-color: white;
+    border-radius: 2px;
+    border-style: solid;
+    content: " ";
+  }
+  
+  /* Top left corner */
+  .animBox:before {
+    top: 0;
+    left: 0;
+    border-width: 2px 0 0 2px;
+  }
+  
+  /* Top right corner */
+  .animBox:after {
+    top: 0;
+    right: 0;
+    border-width: 2px 2px 0 0;
+  }
+  
+  /* Bottom right corner */
+  .animBox > :first-child:before {
+    bottom: 0;
+    right: 0;
+    border-width: 0 2px 2px 0;
+  }
+  
+  /* Bottom left corner */
+  .animBox > :first-child:after {
+    bottom: 0;
+    left: 0;
+    border-width: 0 0 2px 2px;
+  }
+  
+  /* Barcode bars */
+  .animItem {
+    display: inline-block;
+    background-color: white;
+    height: 100px;
+  }
+  
+  .animItemSm {
+    width: 2px;
+    margin-right: 3px;
+  }
+  
+  .animItemMd {
+    width: 3px;
+    margin-right: 2px;
+  }
+  
+  .animItemLg {
+    width: 5px;
+    margin-right: 5px;
+  }
+  
+  /* Animated laser beam */
+  .scanner {
+    width: 100%;
+    border-radius: 10px;
+    height: 2px;
+    background-color: red;
+    opacity: 0.7;
+    position: relative;
+    box-shadow: 0px 0px 8px 10px rgba(170, 11, 23, 0.49);
+    top: 50%;
+    animation-name: scan;
+    animation-duration: 4s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-play-state: running;
+  }
+  
+  @keyframes scan {
+    0% {
+      box-shadow: 0px 0px 8px 10px rgba(170, 11, 23, 0.49);
+      top: 50%;
+    }
+    25% {
+      box-shadow: 0px 6px 8px 10px rgba(170, 11, 23, 0.49);
+      top: 5px;
+    }
+    75% {
+      box-shadow: 0px -6px 8px 10px rgba(170, 11, 23, 0.49);
+      top: 98%;
+    }
+  }
+  
