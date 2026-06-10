@@ -18,7 +18,7 @@ try {
 const db = admin.firestore();
 
 const connectDB = async () => {
-  // Initialization is now synchronous, so this is just for compatibility
+  // Initialization is now synchronoussss, so this is just for compatibility
 };
 
 export { connectDB, db };
