@@ -116,20 +116,25 @@ function OCR() {
         setError("An unexpected error occurred. Please Try again later.");
         return;
       } else {
-        console.log("Response from /api/upload", response.data);
-        sessionStorage.removeItem(`product-${barcodeId}`);
-        sessionStorage.removeItem(`aiRec-${barcodeId}`);
-        sessionStorage.removeItem(`fullData-${barcodeId}`);
-        navigate(`/product/${barcodeId}`, {
-          state: { ocr: response.data.product },
-          replace: true,
-        });
+        console.log("Response from /detect", response.data);
+        const finalBarcode = response.data.product.barcode || barcodeId;
+        
+        if (finalBarcode) {
+          sessionStorage.removeItem(`product-${finalBarcode}`);
+          sessionStorage.removeItem(`aiRec-${finalBarcode}`);
+          sessionStorage.removeItem(`fullData-${finalBarcode}`);
+          navigate(`/product/${finalBarcode}`, {
+            state: { ocr: response.data.product },
+            replace: true,
+          });
+        }
         window.history.go(-1);
       }
     } catch (error) {
       // Handle error if API request fails
       console.error(error);
-      setError("An unexpected error occurred. Please Try again later.");
+      const errorMessage = error.response?.data?.error || "An unexpected error occurred. Please Try again later.";
+      setError(errorMessage);
       setLoading(false);
     } 
   };

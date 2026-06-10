@@ -6,12 +6,14 @@ import { GoGitCompare } from "react-icons/go";
 import { IoScan } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
 import { GoHistory } from "react-icons/go";
+import { MdOutlineDocumentScanner } from "react-icons/md";
 import Loading from "../../components/Loading/Loading";
 import Cookies from "js-cookie";
 
 function Home() {
   const [userData, setUserData] = useState({});
   const [Loading, setLoading] = useState(true);
+  const [showScanModal, setShowScanModal] = useState(false);
   const navigate = useNavigate(); // Add navigation
 
   useEffect(() => {
@@ -136,7 +138,7 @@ function Home() {
         </div>
         
         <div className={styles.navBox}>
-          <div className={styles.eachBox} onClick={() => navigate("/scan")}>
+          <div className={styles.eachBox} onClick={() => setShowScanModal(true)}>
             <div className={styles.iconBox}>
               <div className={styles.icon}>
                 <IoScan size={17} color="white" />
@@ -182,6 +184,23 @@ function Home() {
           </div>
         </div>
       </div>
+
+      {showScanModal && (
+        <div className={styles.modalOverlay} onClick={() => setShowScanModal(false)}>
+          <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+            <h3>Select Scan Method</h3>
+            <div className={styles.modalButtons}>
+              <button onClick={() => navigate("/scan")} className={styles.scanBtn}>
+                <IoScan size={24} color="green" /> Barcode Scan
+              </button>
+              <button onClick={() => navigate("/ocr")} className={styles.scanBtn}>
+                <MdOutlineDocumentScanner size={24} color="green" /> OCR Scan (Text)
+              </button>
+            </div>
+            <button className={styles.closeBtn} onClick={() => setShowScanModal(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

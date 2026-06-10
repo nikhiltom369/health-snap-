@@ -202,7 +202,7 @@ Convert it into JSON:
     "sodium": "<Sodium>"
   }
 }
-Return JSON only. If a value is missing, use 0.use numeric values only, no units. It should be per 100g of the product.`;
+Return exactly and only this JSON structure. If you cannot read the image, or it is not a label, return the JSON with all values as 0. Use numeric values only, no units. It should be per 100g of the product. No extra text or markdown.`;
 
       // Prompt for Ingredients JSON
       const ingredPrompt = `Extract ingredients from this image.
@@ -210,45 +210,41 @@ Convert it into JSON:
 {
   "ingredients": ["<Ingredient 1>", "<Ingredient 2>", ...]
 }
-Use Title Case for ingredients. Return JSON only.`;
+Use Title Case for ingredients. Return exactly and only this JSON structure. If you cannot read the image, return {"ingredients": []}. No extra text or markdown.`;
 
       // Send both images + prompts to Gemini in parallel
-      const [nutriResult, ingredResult] = await Promise.all([
-        model.generateContent({
-          contents: [
-            {
-              // Image part
-              parts: [
-                {
-                  inlineData: {
-                    mimeType: req.files.nutriImage[0].mimetype,
-                    data: nutriBase64,
-                  },
+      // Send requests sequentially to avoid strict concurrency limits (429 errors)
+      const nutriResult = await model.generateContent({
+        contents: [
+          {
+            parts: [
+              {
+                inlineData: {
+                  mimeType: req.files.nutriImage[0].mimetype,
+                  data: nutriBase64,
                 },
-                // Text part
-                { text: nutriPrompt },
-              ],
-            },
-          ],
-        }),
-        model.generateContent({
-          contents: [
-            {
-              // Image part
-              parts: [
-                {
-                  inlineData: {
-                    mimeType: req.files.ingredImage[0].mimetype,
-                    data: ingredBase64,
-                  },
+              },
+              { text: nutriPrompt },
+            ],
+          },
+        ],
+      });
+
+      const ingredResult = await model.generateContent({
+        contents: [
+          {
+            parts: [
+              {
+                inlineData: {
+                  mimeType: req.files.ingredImage[0].mimetype,
+                  data: ingredBase64,
                 },
-                // Text part
-                { text: ingredPrompt },
-              ],
-            },
-          ],
-        }),
-      ]);
+              },
+              { text: ingredPrompt },
+            ],
+          },
+        ],
+      });
 
       let rawnutriResponse = nutriResult.response.text().trim();
       let rawingredResponse = ingredResult.response.text().trim();
@@ -265,7 +261,9 @@ Use Title Case for ingredients. Return JSON only.`;
         realIngredData = JSON.parse(rawingredResponse);
       } catch (error) {
         console.error("Error parsing JSON:", error);
-        return res.status(500).send("Error parsing AI response JSON");
+        console.error("Raw Nutri:", rawnutriResponse);
+        console.error("Raw Ingred:", rawingredResponse);
+        return res.status(422).json({ error: "Could not read the labels clearly. Please try again with better lighting and a closer shot." });
       }
 
       // Save to DB
@@ -283,11 +281,31 @@ Use Title Case for ingredients. Return JSON only.`;
           product: productData,
         });
       } else {
-        res.status(404).json({ message: "Product not found" });
+        // Create a new product if no barcode matches or barcode is null
+        const newBarcode = (!realBarcode || realBarcode === "null") ? `ocr_${Date.now()}` : realBarcode;
+        const newProduct = {
+          barcode: newBarcode,
+          nutritional_info_per100g: realNutriData.nutritional_info_per100g || {},
+          ingredients: realIngredData.ingredients || [],
+          accuracy: 90,
+          product_name: "Unknown Product (Scanned via OCR)",
+          brand: "Unknown Brand",
+          description: "Details extracted via AI OCR"
+        };
+        await db.collection("products").add(newProduct);
+
+        res.json({
+          message: "Product created from OCR",
+          product: newProduct
+        });
       }
     } catch (error) {
       console.error(error);
-      res.status(500).send("Error processing images with Gemini");
+      const isRateLimit = error.status === 429 || error.message?.includes("429") || error.statusText === 'Too Many Requests';
+      if (isRateLimit) {
+        return res.status(429).json({ error: "AI rate limit reached. Please wait 60 seconds and try again." });
+      }
+      res.status(500).json({ error: "Error processing images with Gemini API. " + (error.message || "") });
     }
   }
 );
@@ -332,7 +350,7 @@ Use Title Case for ingredients. Return JSON only.`;
 //         // Generate the prompt for AI model using both texts
 
 //         const nutriPrompt = `Nutri Text : ${nutriText} 
-      
+
 //       convert this into JSON of 
 //       // Every field should have a numeric value. If the value is not present, use 0.
 //       {
@@ -349,7 +367,7 @@ Use Title Case for ingredients. Return JSON only.`;
 //           "sodium": "<Sodium>"
 //         }
 //       }
-      
+
 //       // only fill numeric values with no si unts in case of nutritional info.
 //       // It should be per 100g of the product.
 //       Return JSON only.`;
@@ -987,7 +1005,7 @@ app.get("/getcart", verifyToken, async (req, res) => {
 
     const cartData = cartDoc.data();
     const populatedProducts = [];
-    
+
     if (cartData.products) {
       for (const item of cartData.products) {
         const productDoc = await db.collection("products").doc(item.product).get();
@@ -1007,7 +1025,7 @@ app.get("/getcart", verifyToken, async (req, res) => {
   }
 });
 
-app.delete("/deletecart/:id",verifyToken, async (req, res) => {
+app.delete("/deletecart/:id", verifyToken, async (req, res) => {
   try {
     console.log("Removing product from cart...");
     const { id } = req.params; // Firestore product document ID
@@ -1022,7 +1040,7 @@ app.delete("/deletecart/:id",verifyToken, async (req, res) => {
 
     const cartData = cartDoc.data();
     const originalLength = cartData.products ? cartData.products.length : 0;
-    
+
     cartData.products = (cartData.products || []).filter(item => item.product !== id);
 
     if (cartData.products.length === originalLength) {
@@ -1043,7 +1061,7 @@ app.delete("/deletecart/:id",verifyToken, async (req, res) => {
 app.post("/cmpresult", async (req, res) => {
 
   const data = req.body.products;
-  console.log("data",data);
+  console.log("data", data);
 
   try {
     const prompt = `Generate a JSON response that compares multiple food products ${data} based on their nutritional value. The JSON should follow this structure:
