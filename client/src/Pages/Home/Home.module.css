@@ -195,7 +195,10 @@
 
   @media screen and (min-width: 1024px) {
     .homeContent{
-        width: 50vw;
+        width: 450px;
+    }
+    .productTitle{
+        width: 450px;
     }
   }
 .tipBox{

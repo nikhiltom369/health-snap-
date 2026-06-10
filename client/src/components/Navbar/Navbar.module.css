@@ -107,3 +107,12 @@
     cursor: pointer;
     font-weight: 500;
 }
+
+@media screen and (min-width: 1024px) {
+    .mainDiv {
+        min-width: 450px !important;
+        max-width: 450px !important;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
